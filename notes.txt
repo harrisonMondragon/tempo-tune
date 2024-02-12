@@ -3,10 +3,19 @@ Start with playlist ID and BPM as inputs
 -Find playlist
 -Get all spotify IDs from playlist tracks
 -Iterate IDs to find songs that have tempos that are factors of bpm
--Output traks matching search
+-Output tracks matching search
 
 Retreive playlist (requires playlist to be public):
 https://developer.spotify.com/documentation/web-api/reference/get-playlist
 
 Retreive BPM (tempo field in response json):
 https://developer.spotify.com/documentation/web-api/reference/get-audio-features
+
+Spotify branding guidelines:
+https://developer.spotify.com/documentation/design
+
+Logo usage:
+https://developer.spotify.com/documentation/design#using-our-logo
+
+Tutorial followed in spotify-profile-demo:
+https://developer.spotify.com/documentation/web-api/howtos/web-app-profile
