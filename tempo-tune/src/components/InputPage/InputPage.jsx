@@ -1,10 +1,11 @@
-import "./LandingPage.css";
-
+import "./InputPage.css";
 import React, { useState } from 'react';
 
+// Components
 import BpmSelector from "../BpmSelector/BpmSelector";
+import NavBar from "../NavBar/NavBar";
 
-const LandingPage = () => {
+const InputPage = () => {
 
     const [number, setNumber] = useState(0);
 
@@ -14,10 +15,7 @@ const LandingPage = () => {
 
     return (
         <div>
-            <header className="hero-section">
-                <h1>TempoTune</h1>
-                {/* Logo eventually */}
-            </header>
+            <NavBar />
             <section className="input-section">
                 <h2>Select the BPM you want</h2>
                 <BpmSelector value={number} onChange={handleNumberChange} />
@@ -26,4 +24,4 @@ const LandingPage = () => {
     );
 };
 
-export default LandingPage;
+export default InputPage;

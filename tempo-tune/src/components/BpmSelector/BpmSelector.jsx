@@ -1,3 +1,5 @@
+import "./BpmSelector.css";
+
 function BpmSelector({ value, onChange }) {
     const handleChange = (event) => {
         const newValue = parseInt(event.target.value, 10);
