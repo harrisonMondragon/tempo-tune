@@ -1,8 +1,8 @@
 import "./LandingPage.css";
-import { Link } from "react-router-dom";
 
-// Components
+// Components and scripts
 import NavBar from "../NavBar/NavBar";
+import {authenticateUser} from "../../scripts/auth";
 
 const LandingPage = () => {
     return (
@@ -10,9 +10,7 @@ const LandingPage = () => {
             <NavBar />
             <section className="login-section">
                 <h2>You're gonna have to login to spotify below pls</h2>
-                <Link to="/input-page">
-                    <button>Login</button>
-                </Link>
+                <button onClick={authenticateUser}>Login</button>
             </section>
         </div>
     );
