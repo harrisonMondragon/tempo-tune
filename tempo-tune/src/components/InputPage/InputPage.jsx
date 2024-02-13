@@ -1,5 +1,5 @@
 import "./InputPage.css";
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Components
 import BpmSelector from "../BpmSelector/BpmSelector";

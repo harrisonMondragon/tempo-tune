@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import InputPage from "./components/InputPage/InputPage";
 import LandingPage from "./components/LandingPage/LandingPage";
 
