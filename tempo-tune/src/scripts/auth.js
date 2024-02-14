@@ -1,76 +1,123 @@
-// Script taken from https://developer.spotify.com/documentation/web-api/howtos/web-app-profile
+// This code was directly taken from the following link:
+// https://github.com/spotify/web-api-examples/blob/master/authorization/authorization_code_pkce/public/app.js
 
 const clientId = "7334ee27ab374209b37f25cfe28c3725"; // tempo-tune client id
-const params = new URLSearchParams(window.location.search);
-const code = params.get("code");
+const redirectUrl = 'http://localhost:3000/input-page'; // your redirect URL
 
-// Called by login button click on LandingPage
-export async function authenticateUser(){
-    if (!code) {
-        redirectToAuthCodeFlow(clientId);
-    } else {
-        const accessToken = await getAccessToken(clientId, code);
-        return accessToken
-        // const profile = await fetchProfile(accessToken);
-        // console.log(profile); // Profile data logs to console
-        // populateUI(profile);
-    }
+const authorizationEndpoint = "https://accounts.spotify.com/authorize";
+const tokenEndpoint = "https://accounts.spotify.com/api/token";
+const scope = 'user-read-private user-read-email';
+
+// Data structure that manages the current active token, caching it in localStorage
+const currentToken = {
+ get access_token() { return localStorage.getItem('access_token') || null; },
+ get refresh_token() { return localStorage.getItem('refresh_token') || null; },
+ get expires_in() { return localStorage.getItem('refresh_in') || null },
+ get expires() { return localStorage.getItem('expires') || null },
+
+ save: function (response) {
+   const { access_token, refresh_token, expires_in } = response;
+   localStorage.setItem('access_token', access_token);
+   localStorage.setItem('refresh_token', refresh_token);
+   localStorage.setItem('expires_in', expires_in);
+
+   const now = new Date();
+   const expiry = new Date(now.getTime() + (expires_in * 1000));
+   localStorage.setItem('expires', expiry);
+ }
+};
+
+// On page load, try to fetch auth code from current browser search URL
+const args = new URLSearchParams(window.location.search);
+const code = args.get('code');
+
+async function redirectToSpotifyAuthorize() {
+ const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+ const randomValues = crypto.getRandomValues(new Uint8Array(64));
+ const randomString = randomValues.reduce((acc, x) => acc + possible[x % possible.length], "");
+
+ const code_verifier = randomString;
+ const data = new TextEncoder().encode(code_verifier);
+ const hashed = await crypto.subtle.digest('SHA-256', data);
+
+ const code_challenge_base64 = btoa(String.fromCharCode(...new Uint8Array(hashed)))
+   .replace(/=/g, '')
+   .replace(/\+/g, '-')
+   .replace(/\//g, '_');
+
+ window.localStorage.setItem('code_verifier', code_verifier);
+
+ const authUrl = new URL(authorizationEndpoint)
+ const params = {
+   response_type: 'code',
+   client_id: clientId,
+   scope: scope,
+   code_challenge_method: 'S256',
+   code_challenge: code_challenge_base64,
+   redirect_uri: redirectUrl,
+ };
+
+ authUrl.search = new URLSearchParams(params).toString();
+ window.location.href = authUrl.toString(); // Redirect the user to the authorization server for login
 }
 
-export async function redirectToAuthCodeFlow(clientId) {
-    const verifier = generateCodeVerifier(128);
-    const challenge = await generateCodeChallenge(verifier);
+// Soptify API Calls
+async function getToken(code) {
+ const code_verifier = localStorage.getItem('code_verifier');
 
-    localStorage.setItem("verifier", verifier);
+ const response = await fetch(tokenEndpoint, {
+   method: 'POST',
+   headers: {
+     'Content-Type': 'application/x-www-form-urlencoded',
+   },
+   body: new URLSearchParams({
+     client_id: clientId,
+     grant_type: 'authorization_code',
+     code: code,
+     redirect_uri: redirectUrl,
+     code_verifier: code_verifier,
+   }),
+ });
 
-    const params = new URLSearchParams();
-    params.append("client_id", clientId);
-    params.append("response_type", "code");
-    // params.append("redirect_uri", "http://localhost:3000/callback");
-    params.append("redirect_uri", "http://localhost:3000/input-page");
-    params.append("scope", "user-read-private user-read-email");
-    params.append("code_challenge_method", "S256");
-    params.append("code_challenge", challenge);
-
-    document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
+ return await response.json();
 }
 
-function generateCodeVerifier(length) {
-    let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+async function refreshToken() {
+ const response = await fetch(tokenEndpoint, {
+   method: 'POST',
+   headers: {
+     'Content-Type': 'application/x-www-form-urlencoded'
+   },
+   body: new URLSearchParams({
+     client_id: clientId,
+     grant_type: 'refresh_token',
+     refresh_token: currentToken.refresh_token
+   }),
+ });
 
-    for (let i = 0; i < length; i++) {
-     text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
+ return await response.json();
 }
 
-async function generateCodeChallenge(codeVerifier) {
-    const data = new TextEncoder().encode(codeVerifier);
-    const digest = await window.crypto.subtle.digest('SHA-256', data);
-    return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
+async function getUserData() {
+ const response = await fetch("https://api.spotify.com/v1/me", {
+   method: 'GET',
+   headers: { 'Authorization': 'Bearer ' + currentToken.access_token },
+ });
+
+ return await response.json();
 }
 
-export async function getAccessToken(clientId, code) {
-    const verifier = localStorage.getItem("verifier");
+// Click handlers
+export async function loginWithSpotifyClick() {
+ await redirectToSpotifyAuthorize();
+}
 
-    const params = new URLSearchParams();
-    params.append("client_id", clientId);
-    params.append("grant_type", "authorization_code");
-    params.append("code", code);
-    // params.append("redirect_uri", "http://localhost:3000/callback");
-    params.append("redirect_uri", "http://localhost:3000/input-page");
-    params.append("code_verifier", verifier);
+async function logoutClick() {
+ localStorage.clear();
+ window.location.href = redirectUrl;
+}
 
-    const result = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params
-    });
-
-    const { access_token } = await result.json();
-    return access_token;
+async function refreshTokenClick() {
+ const token = await refreshToken();
+ currentToken.save(token);
 }

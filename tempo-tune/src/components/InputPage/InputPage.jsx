@@ -7,7 +7,7 @@ import { fetchProfile } from "../../scripts/fetch";
 import BpmSelector from "../BpmSelector/BpmSelector";
 import NavBar from "../NavBar/NavBar";
 
-const InputPage = ( {accessToken} ) => {
+const InputPage = () => {
 
     const [number, setNumber] = useState(0);
 
@@ -15,11 +15,14 @@ const InputPage = ( {accessToken} ) => {
         setNumber(newValue);
     };
 
-    // Perform authentication and retrieve access token
-    const fetchUsername = async () => {
-        const ahh = await fetchProfile(accessToken);
-        console.log(ahh);
-    };
+    const logProfile = async () => {
+        try {
+            const profile = await fetchProfile();
+            console.log(profile);
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+        }
+    }
 
     return (
         <div>
@@ -27,7 +30,7 @@ const InputPage = ( {accessToken} ) => {
             <section className="input-section">
                 <h2>Select the BPM you want</h2>
                 <BpmSelector value={number} onChange={handleNumberChange} />
-                <button onClick={fetchUsername}>Show Username</button>
+                <button onClick={logProfile}>Log Profile!</button>
             </section>
         </div>
     );
