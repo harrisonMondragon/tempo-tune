@@ -21,3 +21,9 @@ https://developer.spotify.com/documentation/web-api/howtos/web-app-profile
 
 Auth flow I should be using:
 https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
+
+Spotify react tutorial:
+https://javascript.plainenglish.io/how-to-include-spotify-authorization-in-your-react-app-577b63138fd7
+
+Wrapper package:
+https://www.npmjs.com/package/spotify-web-api-js
