@@ -10,7 +10,7 @@ const app = express();
 app.get("/", (req, res) => {
     // res.send("Hello World!");
     const data = {
-        name: "Harra",
+        name: "Harrison",
         isAwesome: true
     };
 
