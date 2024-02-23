@@ -36,6 +36,7 @@ const generateRandomString = length => {
 
 const stateKey = 'spotify_auth_state';
 
+// login route handler
 app.get("/login", (req, res) => {
 
     // Set a cookie to keep our randomly generated state
@@ -61,6 +62,7 @@ app.get("/login", (req, res) => {
     res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
+// callback route handler
 app.get('/callback', (req, res) => {
 
     // Store the value of our authorization code which we got from the code query param
@@ -98,6 +100,30 @@ app.get('/callback', (req, res) => {
         } else {
             res.send(response);
         }
+    })
+    .catch(error => {
+        res.send(error);
+    });
+});
+
+// refresh_token route handler
+app.get('/refresh_token', (req, res) => {
+    const { refresh_token } = req.query;
+
+    axios({
+        method: 'post',
+        url: 'https://accounts.spotify.com/api/token',
+        data: querystring.stringify({
+            grant_type: 'refresh_token',
+            refresh_token: refresh_token
+        }),
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            Authorization: `Basic ${new Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`,
+        },
+    })
+    .then(response => {
+        res.send(response.data);
     })
     .catch(error => {
         res.send(error);
