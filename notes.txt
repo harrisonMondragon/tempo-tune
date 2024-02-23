@@ -18,3 +18,11 @@ https://developer.spotify.com/documentation/design#using-our-logo
 
 Using the following tutorial:
 https://www.newline.co/courses/build-a-spotify-connected-app
+
+To run app:
+    Run [npm_start] in terminal and visit the url it says
+    See package.json "scripts" to see that it starts the server
+    Use on incognito to avoid login and auth issues
+
+TODO:
+ - Convert app to use Auth with PKCE instead of plain auth, its safer that way
