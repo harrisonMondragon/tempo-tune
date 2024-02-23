@@ -1,24 +1,18 @@
-require("dotenv").config(); // Handle the .env file that contains app-specific information
-const express = require("express"); // Back-end framework for building RESTful APIs with Node.js
+const dotenv = require("dotenv").config();  // Handle the .env file that contains app-specific information
+const express = require("express");         // Back-end framework for building RESTful APIs with Node.js
 const querystring = require("querystring"); // Helps handle query params easier
-const axios = require("axios"); // Help handle POST requests easier
+const axios = require("axios");             // Help handle HTTP requests easier
 
 const app = express();
 const port = 8888;
+const stateKey = "spotify_auth_state";
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 
-app.get("/", (req, res) => {
-    // res.send("Hello World!");
-    const data = {
-        name: "Harrison",
-        isAwesome: true
-    };
 
-    res.json(data);
-});
+// ---------------------- Utility Functions ----------------------
 
 /**
  * Generates a random string containing numbers and letters
@@ -34,9 +28,20 @@ const generateRandomString = length => {
     return text;
 };
 
-const stateKey = 'spotify_auth_state';
 
-// login route handler
+// ---------------------- Route Handlers ----------------------
+
+app.get("/", (req, res) => {
+    // res.send("Hello World!");
+    const data = {
+        name: "Harrison",
+        isAwesome: true
+    };
+
+    res.json(data);
+});
+
+// Redirects to Spotify auth, upon successful login the endpoint will return a code to the callback route
 app.get("/login", (req, res) => {
 
     // Set a cookie to keep our randomly generated state
@@ -45,7 +50,6 @@ app.get("/login", (req, res) => {
 
     const scope = 'user-read-private user-read-email';
 
-    // queryParams just helps handle query url parameters easier
     const queryParams = querystring.stringify({
         client_id: CLIENT_ID,
         response_type: "code",
@@ -54,18 +58,13 @@ app.get("/login", (req, res) => {
         scope: scope
     });
 
-    // queryParams evaluates to something like client_id=abc123&response_type=code&redirect_uri=http://localhost:8888/callback
-    // Without using queryParams, the code would be something like:
-    // res.redirect(`https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`);
-
-    // When this URL is hit, it will automatically redirect to Spotify account service URL
     res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-// callback route handler
+// Receives the callback from Spotify auth endpoint, gets a token, then uses it to get profile data
 app.get('/callback', (req, res) => {
 
-    // Store the value of our authorization code which we got from the code query param
+    // Callback code in the url needed to get the token
     const code = req.query.code || null;
 
     // Axios is promise based, thats why a then, and a catch callback is chained through
@@ -106,7 +105,7 @@ app.get('/callback', (req, res) => {
     });
 });
 
-// refresh_token route handler
+// Route for refreshing the token, it expires in 1 hour
 app.get('/refresh_token', (req, res) => {
     const { refresh_token } = req.query;
 
@@ -130,7 +129,7 @@ app.get('/refresh_token', (req, res) => {
     });
 });
 
-// Listens on port 8888
+
 app.listen(port, () => {
     console.log(`Express app listening at http://localhost:${port}`);
 });
