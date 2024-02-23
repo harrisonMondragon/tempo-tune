@@ -66,6 +66,7 @@ app.get('/callback', (req, res) => {
     // Store the value of our authorization code which we got from the code query param
     const code = req.query.code || null;
 
+    // Axios is promise based, thats why a then, and a catch callback is chained through
     axios({
         method: 'post',
         url: 'https://accounts.spotify.com/api/token',
@@ -81,7 +82,19 @@ app.get('/callback', (req, res) => {
     })
     .then(response => {
         if (response.status === 200) {
-            res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
+            const { access_token, token_type } = response.data;
+
+            // Another axios get call nested within the callback route to get profile data
+            axios.get('https://api.spotify.com/v1/me', {
+                headers: {Authorization: `${token_type} ${access_token}`}
+            })
+            .then(response => {
+                // Pre is for preformatted - keeps all whitespace and such when it is sent to the browser
+                res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
+            })
+            .catch(error => {
+                res.send(error);
+            });
         } else {
             res.send(response);
         }
