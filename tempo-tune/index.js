@@ -61,7 +61,7 @@ app.get("/login", (req, res) => {
     res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-// Receives the callback from Spotify auth endpoint, gets a token, then uses it to get profile data
+// Receives the callback from Spotify auth endpoint, gets a token, then redirects back to client with the tokens in the url
 app.get('/callback', (req, res) => {
 
     // Callback code in the url needed to get the token
@@ -83,21 +83,17 @@ app.get('/callback', (req, res) => {
     })
     .then(response => {
         if (response.status === 200) {
-            const { access_token, token_type } = response.data;
+            const { access_token, refresh_token } = response.data;
 
-            // Another axios get call nested within the callback route to get profile data
-            axios.get('https://api.spotify.com/v1/me', {
-                headers: {Authorization: `${token_type} ${access_token}`}
-            })
-            .then(response => {
-                // Pre is for preformatted - keeps all whitespace and such when it is sent to the browser
-                res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
-            })
-            .catch(error => {
-                res.send(error);
+            const queryParams = querystring.stringify({
+                access_token,
+                refresh_token
             });
+
+            // redirect to react app and pass along tokens in query params
+            res.redirect(`http://localhost:3000/?${queryParams}`);
         } else {
-            res.send(response);
+            res.redirect(`/?${querystring.stringify({error: 'invalid token'})}`);
         }
     })
     .catch(error => {
