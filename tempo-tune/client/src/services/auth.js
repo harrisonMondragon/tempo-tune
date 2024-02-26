@@ -63,7 +63,7 @@ const hasTokenExpired = () => {
  * or URL query params
  * @returns {string} A Spotify access token
  */
-export const getAccessToken = () => {
+const getAccessToken = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const queryParams = {
@@ -99,16 +99,19 @@ export const getAccessToken = () => {
     return false;
 };
 
+export const accessToken = getAccessToken();
+
 /**
  * Clear out all localStorage items we've set and reload the page
  * @returns {void}
  */
 export const logout = () => {
+    // Navigate to homepage
+    window.location = window.location.origin;
+
     // Clear all localStorage items
     for (const property in LOCALSTORAGE_KEYS) {
       window.localStorage.removeItem(LOCALSTORAGE_KEYS[property]);
     }
-    // Navigate to homepage
-    window.location = window.location.origin;
 };
 
