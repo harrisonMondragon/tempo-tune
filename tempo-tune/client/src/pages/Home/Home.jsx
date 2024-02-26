@@ -15,12 +15,45 @@ const Home = () => {
     async function fetchData() {
       const userProfile = await getCurrentUserProfile();
       setProfile(userProfile.data);
-
       const userPlaylists = await getCurrentUserPlaylists();
-      setPlaylists(userPlaylists.data);
+      setPlaylistsData(userPlaylists.data);
     }
     catchErrors(fetchData());
   }, []);
+
+  // When playlistsData updates, check if there are more playlists to fetch
+  // then update the state variable
+  useEffect(() => {
+    if (!playlistsData) {
+      return;
+    }
+
+    // Playlist endpoint only returns 20 playlists at a time, so we need to
+    // make sure we get ALL playlists by fetching the next set of playlists
+    const fetchMoreData = async () => {
+      if (playlistsData.next) {
+        const { data } = await axios.get(playlistsData.next);
+        setPlaylistsData(data);
+      }
+    };
+
+    // Use functional update to update playlists state variable
+    // to avoid including playlists as a dependency for this hook
+    // and creating an infinite loop
+    setPlaylists(playlists => ([
+      ...playlists ? playlists : [],
+      ...playlistsData.items
+    ]));
+
+    // Fetch next set of playlists as needed
+    catchErrors(fetchMoreData());
+
+  }, [playlistsData]);
+
+  const logPlaylists = () => {
+    console.log(playlists);
+    console.log(playlists.length);
+  };
 
   return(
     <div className="home-container">
@@ -32,14 +65,15 @@ const Home = () => {
           )}
           <span>{profile.display_name}</span>
 
-          {playlists && (
-            <span>{playlists.total} Playlist{playlists.total !== 1 ? 's' : ''}</span>
+          {playlistsData && (
+            <span>{playlistsData.total} Playlist{playlistsData.total !== 1 ? 's' : ''}</span>
           )}
           <span>
             {profile.followers.total} Follower{profile.followers.total !== 1 ? 's' : ''}
           </span>
         </div>
       )}
+      <button onClick={logPlaylists}>Log Playlists</button>
     </div>
   );
 };
