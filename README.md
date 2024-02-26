@@ -9,3 +9,7 @@ This project is currently in development. To run, a Spotify developer applicatio
 - Run `npm install`
 - Run `npm start`
 - A browser should open on `http://localhost:3000` for the client, the server should already be running
+
+## References:
+- [Newline tutorial](https://www.newline.co/courses/build-a-spotify-connected-app)
+- [Spotify Documentation](https://developer.spotify.com/documentation/web-api)
