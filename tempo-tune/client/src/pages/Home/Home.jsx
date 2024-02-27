@@ -12,7 +12,10 @@ const Home = () => {
 
   // Get profile and playlist data
   useEffect(() => {
-    async function fetchData() {
+
+    // Lots of investigation needed here. Switching between these function declarations change things
+    // async function fetchData() {
+    const fetchData = async () => {
       const userProfile = await getCurrentUserProfile();
       setProfile(userProfile.data);
       const userPlaylists = await getCurrentUserPlaylists();
