@@ -1,28 +1,19 @@
-Start with playlist ID and BPM as inputs
+Pages and MVP Functionality:
+ - Login: Shows on root route if token does not exist
+    - Redirects to spotify auth
+ - Home: Shows on root route if token exists
+    - Displays all public playlists the user has created
+ - Input: Shows once a user clicks a playlist from Home
+    - Displays all songs in the playlist with bpm as well as other metadata
+    - Has numerical input for desired bpm (hardcode the leniency for now)
+    - Has button for performing the search
+ - Results: Shows search results once a user clicks the search button from Input
+    - Displays subset tracks from playlist that match the desired bpm
 
--Login using spotify auth
--Get all user playlists, select one
--Get all spotify IDs from playlist tracks
--Iterate IDs to find songs that have tempos that are factors/multiples of bpm
--Output tracks matching search
--Option to add playlist to library
-
-Retreive BPM (tempo field in response json):
-https://developer.spotify.com/documentation/web-api/reference/get-audio-features
-
-Spotify branding guidelines:
-https://developer.spotify.com/documentation/design
-
-Logo usage:
-https://developer.spotify.com/documentation/design#using-our-logo
-
-Using the following tutorial:
-https://www.newline.co/courses/build-a-spotify-connected-app
-
-To run app:
-    Run [npm_start] in terminal and visit the url it says
-    See package.json "scripts" to see that it starts the server
-    Use on incognito to avoid login and auth issues
-
-TODO:
+Next Steps:
  - Convert app to use Auth with PKCE instead of plain auth, its safer that way
+ - Allow option to add tracks in Results as a new playlist, name it too
+ - Select multiple playlists to search through
+ - Sort by bpm on Input
+ - Option to use public playlist by share link
+ - Other input subset options (albums, top tracks, artists, etc...)
