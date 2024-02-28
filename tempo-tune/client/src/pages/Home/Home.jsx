@@ -7,55 +7,54 @@ import { catchErrors } from '../../services/util';
 
 const Home = () => {
   const [profile, setProfile] = useState(null);
-  const [playlistsData, setPlaylistsData] = useState(null);
+  const [nextPlaylistsUrl, setNextPlaylistsUrl] = useState(null);
   const [playlists, setPlaylists] = useState(null);
 
   // Get profile and playlist data
   useEffect(() => {
-
-    // Lots of investigation needed here. Switching between these function declarations change things
-    // async function fetchData() {
     const fetchData = async () => {
+      // Set the profile state variable
       const userProfile = await getCurrentUserProfile();
       setProfile(userProfile.data);
+
+      // Set the playlists and nextPlaylistsUrl state variables
       const userPlaylists = await getCurrentUserPlaylists();
-      setPlaylistsData(userPlaylists.data);
+      setPlaylists(userPlaylists.data.items);
+      setNextPlaylistsUrl(userPlaylists.data.next);
     }
+
     catchErrors(fetchData());
   }, []);
 
-  // When playlistsData updates, check if there are more playlists to fetch
-  // then update the state variable
+  // When nextPlaylistsUrl updates, fetch the next playlists then update playlists state variable
   useEffect(() => {
-    if (!playlistsData) {
-      return;
-    }
-
     // Playlist endpoint only returns 20 playlists at a time, so we need to
     // make sure we get ALL playlists by fetching the next set of playlists
     const fetchMoreData = async () => {
-      if (playlistsData.next) {
-        const { data } = await axios.get(playlistsData.next);
-        setPlaylistsData(data);
-      }
+      const { data, next } = await axios.get(nextPlaylistsUrl);
+      // Use functional update to update playlists state variable
+      // to avoid including playlists as a dependency for this hook
+      // and creating an infinite loop
+      setPlaylists(playlists => ([
+        ...playlists ? playlists : [],
+        ...data.items
+      ]));
+
+      setNextPlaylistsUrl(next)
     };
 
-    // Use functional update to update playlists state variable
-    // to avoid including playlists as a dependency for this hook
-    // and creating an infinite loop
-    setPlaylists(playlists => ([
-      ...playlists ? playlists : [],
-      ...playlistsData.items
-    ]));
+    // When nextPlaylistsUrl is null, stop
+    if(!nextPlaylistsUrl){
+      return;
+    }
 
     // Fetch next set of playlists as needed
     catchErrors(fetchMoreData());
 
-  }, [playlistsData]);
+  }, [nextPlaylistsUrl]);
 
   const logPlaylists = () => {
     console.log(playlists);
-    console.log(playlists.length);
   };
 
   return(
@@ -67,10 +66,6 @@ const Home = () => {
             <img src={profile.images[0].url} alt="Avatar"/>
           )}
           <span>{profile.display_name}</span>
-
-          {playlistsData && (
-            <span>{playlistsData.total} Playlist{playlistsData.total !== 1 ? 's' : ''}</span>
-          )}
           <span>
             {profile.followers.total} Follower{profile.followers.total !== 1 ? 's' : ''}
           </span>
