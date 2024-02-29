@@ -1,12 +1,16 @@
 import "./Login.css";
 
 const Login = () => {
+
+  const handleLoginClick = () => {
+    window.location.href="http://localhost:8888/login";
+  };
+
   return (
     <div className="login-container">
-      <h1>U gotta log in pls</h1>
-      <a className="App-link" href="http://localhost:8888/login">
-        Log in to Spotify
-      </a>
+      <h1>Welcome to TempoTune</h1>
+      <h2>A tool to find songs with the BPM you want!</h2>
+      <button className="login-button" onClick = {handleLoginClick}>Log in with Spotify</button>
     </div>
   )
 }
