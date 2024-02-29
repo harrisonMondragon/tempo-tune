@@ -13,3 +13,27 @@
   justify-content: center;
   align-items: center;
 }
+
+.playlist-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  height: 70vh; /* Set container height to 70% of viewport height */
+  overflow-y: auto; /* Enable vertical scroll if content overflows */
+  padding: 10px; /* Optional: Add padding around items */
+}
+
+.playlist {
+  width: 30%; /* Adjust the width of each playlist item as needed */
+  margin-bottom: 20px; /* Optional: Add margin between items */
+  text-align: center;
+}
+
+.playlist img {
+  width: 50px; /* Set the width of the image to 100 pixels */
+  height: 50px; /* Set the height of the image to 100 pixels */
+}
+
+.playlist p {
+  margin-top: 5px; /* Optional: Add margin between image and text */
+}

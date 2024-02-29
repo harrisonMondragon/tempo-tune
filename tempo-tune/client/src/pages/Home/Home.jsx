@@ -10,8 +10,9 @@ const Home = () => {
   const [nextPlaylistsUrl, setNextPlaylistsUrl] = useState(null);
   const [playlists, setPlaylists] = useState(null);
 
-  // Get profile and playlist data
+  // Occurs on mount
   useEffect(() => {
+    // Get profile and playlist data
     const fetchData = async () => {
       // Set the profile state variable
       const userProfile = await getCurrentUserProfile();
@@ -26,36 +27,24 @@ const Home = () => {
     catchErrors(fetchData());
   }, []);
 
-  // When nextPlaylistsUrl updates, fetch the next playlists then update playlists state variable
+  // Occurs when nextPlaylistsUrl updates
+  // getCurrentUserPlaylists only gets the first 20, need this useEffect to get them all
   useEffect(() => {
-    // Playlist endpoint only returns 20 playlists at a time, so we need to
-    // make sure we get ALL playlists by fetching the next set of playlists
+    // Fetch the next playlists then update state variables
     const fetchMoreData = async () => {
-      const { data, next } = await axios.get(nextPlaylistsUrl);
-      // Use functional update to update playlists state variable
-      // to avoid including playlists as a dependency for this hook
-      // and creating an infinite loop
-      setPlaylists(playlists => ([
-        ...playlists ? playlists : [],
-        ...data.items
-      ]));
-
-      setNextPlaylistsUrl(next)
+      // Update state variables with next playlist data
+      const moreUserPlaylitsts = await axios.get(nextPlaylistsUrl);
+      setPlaylists(playlists => ([...playlists, ...moreUserPlaylitsts.data.items]));
+      setNextPlaylistsUrl(moreUserPlaylitsts.data.next)
     };
 
-    // When nextPlaylistsUrl is null, stop
+    // Stop when nextPlaylistsUrl is null
     if(!nextPlaylistsUrl){
       return;
     }
 
-    // Fetch next set of playlists as needed
     catchErrors(fetchMoreData());
-
   }, [nextPlaylistsUrl]);
-
-  const logPlaylists = () => {
-    console.log(playlists);
-  };
 
   return(
     <div className="home-container">
@@ -65,13 +54,22 @@ const Home = () => {
           {profile.images.length && profile.images[0].url && (
             <img src={profile.images[0].url} alt="Avatar"/>
           )}
-          <span>{profile.display_name}</span>
-          <span>
-            {profile.followers.total} Follower{profile.followers.total !== 1 ? 's' : ''}
-          </span>
+          <h1>{profile.display_name}</h1>
         </div>
       )}
-      <button onClick={logPlaylists}>Log Playlists</button>
+
+
+      {playlists && (
+        <div className="playlist-container">
+          {playlists.map((playlist, index) => (
+            <div className="playlist" key={index}>
+              <img src={playlist.images[0].url} alt={playlist.name} />
+              <p>{playlist.name}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
     </div>
   );
 };
