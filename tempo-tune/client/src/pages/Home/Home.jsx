@@ -1,6 +1,7 @@
 import "./Home.css";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PlaylistCard from "../../components/PlaylistCard";
 import { logout } from '../../services/auth';
 import { getCurrentUserProfile, getCurrentUserPlaylists } from '../../services/api';
 import { catchErrors } from '../../services/util';
@@ -49,6 +50,8 @@ const Home = () => {
   return(
     <div className="home-container">
       <button onClick={logout}>Log Out</button>
+
+      {/* Display profile data when we get it */}
       {profile && (
         <div className="profile-container">
           {profile.images.length && profile.images[0].url && (
@@ -58,18 +61,18 @@ const Home = () => {
         </div>
       )}
 
-
+      {/* Display playlist data when we get it */}
       {playlists && (
-        <div className="playlist-container">
-          {playlists.map((playlist, index) => (
-            <div className="playlist" key={index}>
-              <img src={playlist.images[0].url} alt={playlist.name} />
-              <p>{playlist.name}</p>
-            </div>
-          ))}
+        <div className="playlists-container">
+          <ul>
+            {playlists.map((playlist, index) => (
+              <li key={index}>
+                <PlaylistCard playlist={playlist} />
+              </li>
+            ))}
+          </ul>
         </div>
       )}
-
     </div>
   );
 };
