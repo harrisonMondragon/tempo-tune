@@ -1,14 +1,17 @@
 import "./PlaylistCard.css";
+import { useNavigate } from 'react-router-dom';
 
 const PlaylistCard = ({playlist}) => {
+  const navigate = useNavigate();
 
   const handlePlaylistClick = () => {
-    console.log(`Clicked playlist ${playlist.name}`);
+    // console.log(`Clicked playlist ${playlist.name}`);
+    navigate(`/input/${playlist.id}`);
   };
 
   return (
     <div className="playlist-container" onClick={handlePlaylistClick}>
-      <div className="playlist_info">
+      <div className="playlist-info">
         <h2>{playlist.name}</h2>
         <p>{playlist.tracks.total} Songs</p>
       </div>

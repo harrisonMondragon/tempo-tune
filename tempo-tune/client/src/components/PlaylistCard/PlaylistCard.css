@@ -18,7 +18,7 @@
   color: #12372A
 }
 
-.playlist_info {
+.playlist-info {
   flex: 1; /* Take up the remaining space */
   display: flex;
   flex-direction: column; /* Stack title and description vertically */

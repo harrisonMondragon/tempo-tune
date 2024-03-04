@@ -24,3 +24,13 @@ export const getCurrentUserProfile = () => axios.get('/me');
 export const getCurrentUserPlaylists = (limit = 20) => {
   return axios.get(`/me/playlists?limit=${limit}`);
 };
+
+/**
+ * Get a Playlist
+ * https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-playlist
+ * @param {string} playlist_id - The Spotify ID for the playlist.
+ * @returns {Promise}
+ */
+export const getPlaylistById = playlist_id => {
+  return axios.get(`/playlists/${playlist_id}`);
+}

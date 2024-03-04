@@ -1,7 +1,7 @@
 import "./Home.css";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import PlaylistCard from "../../components/PlaylistCard";
+import PlaylistCard from "../../components/PlaylistCard/PlaylistCard";
 import { logout } from '../../services/auth';
 import { getCurrentUserProfile, getCurrentUserPlaylists } from '../../services/api';
 import { catchErrors } from '../../services/util';
