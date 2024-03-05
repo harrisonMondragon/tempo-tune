@@ -1,0 +1,27 @@
+.input-page-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100vh;
+  background-color: #FBFADA;
+}
+
+.input-state-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-self: center;
+}
+
+.playlist-tracks-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-self: center;
+}
+
+.tracks-container {
+  align-items: flex-start;
+  overflow-y: auto; /* vertical scroll if content overflows */
+  height: 90vh;
+}

@@ -15,5 +15,9 @@ Next Steps:
  - Allow option to add tracks in Results as a new playlist, name it too
  - Select multiple playlists to search through
  - Sort by bpm on Input
+ - Input distance and time instead of BPM and my code will calculate BPM
  - Option to use public playlist by share link
  - Other input subset options (albums, top tracks, artists, etc...)
+ - Ability to modify playlist before adding to library
+   - Remove tracks that matched the search
+   - Add tracks from the chosen input that didn't match the search

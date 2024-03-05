@@ -5,7 +5,6 @@ const PlaylistCard = ({playlist}) => {
   const navigate = useNavigate();
 
   const handlePlaylistClick = () => {
-    // console.log(`Clicked playlist ${playlist.name}`);
     navigate(`/input/${playlist.id}`);
   };
 

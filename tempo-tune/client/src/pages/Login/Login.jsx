@@ -7,7 +7,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-page-container">
       <h1>Welcome to TempoTune</h1>
       <h2>A tool to find songs with the BPM you want!</h2>
       <button className="login-button" onClick = {handleLoginClick}>Log in with Spotify</button>

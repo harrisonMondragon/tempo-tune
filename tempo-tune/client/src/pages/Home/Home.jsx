@@ -48,7 +48,7 @@ const Home = () => {
   }, [nextPlaylistsUrl]);
 
   return(
-    <div className="home-container">
+    <div className="home-page-container">
       <button onClick={logout}>Log Out</button>
 
       {/* Display profile data when we get it */}
