@@ -3,6 +3,7 @@
   flex-direction: row;
   align-items: center;
   height: 100vh;
+  width: 100vw;
   background-color: #FBFADA;
 }
 
@@ -18,8 +19,23 @@
 .input-playlist-photo {
   width: 150px;
   height: 150px;
-  /* padding: 15px; */
-  object-fit: cover;
+  padding-bottom: 50px;
+}
+
+.find-tracks-button {
+  background-color: #12372A;
+  color: #FBFADA;
+  border: 2px solid #12372A;
+  border-radius: 3px;
+  padding: 10px 20px;
+  margin: 25px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.find-tracks-button:hover {
+  background-color: #ADBC9F;
+  color: #12372A
 }
 
 .playlist-tracks-container {
@@ -27,12 +43,13 @@
   flex-grow: 1;
   flex-direction: column;
   align-self: center;
-  background-color: #12372A;
-  border-radius: 3px;
 }
 
 .tracks-container {
+  width: 90%;
+  background-color: #12372A;
+  border-radius: 6px;
   align-items: flex-start;
-  overflow-y: auto; /* vertical scroll if content overflows */
-  height: 90vh;
+  overflow-y: auto;
+  height: 85vh;
 }

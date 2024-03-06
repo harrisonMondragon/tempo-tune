@@ -4,12 +4,18 @@ import { useParams } from 'react-router-dom';
 import { getPlaylistById } from "../../services/api";
 import { catchErrors } from '../../services/util';
 import TrackInfo from "../../components/TrackInfo/TrackInfo";
+import BpmSelector from "../../components/BpmSelector/BpmSelector";
 
 const Input = () => {
 
   const { id } = useParams();
   const [inputPlaylist, setInputPlaylist] = useState(null);;
   const [tracks, setTracks] = useState(null);
+  const [bpm, setBpm] = useState(80);
+
+  const handleBpmChange = (newBpm) => {
+    setBpm(newBpm);
+  };
 
   // Occurs when id changes
   useEffect(() => {
@@ -23,6 +29,10 @@ const Input = () => {
     catchErrors(fetchData());
   }, [id]);
 
+  const handleFindTracksClick = () => {
+    console.log(`Clicked find tracks for playlist: ${id} and BPM: ${bpm}`)
+  };
+
   return (
     <div className="input-page-container">
 
@@ -32,6 +42,9 @@ const Input = () => {
           <div className="input-playlist-container">
             <h1>{inputPlaylist.name}</h1>
             <img src={inputPlaylist.images[0].url} alt="Playlist Cover" className="input-playlist-photo"/>
+            <h2>Gimme a BPM you want:</h2>
+            <BpmSelector bpm={bpm} onChange={handleBpmChange} />
+            <button className="find-tracks-button" onClick = {handleFindTracksClick}>Find Tracks!</button>
           </div>
         )}
       </div>

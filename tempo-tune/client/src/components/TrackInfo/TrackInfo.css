@@ -1,9 +1,9 @@
 .track-info-container {
   display: flex;
-  flex-direction: row; /* Display info on left and photo on right */
+  flex-direction: row;
   color: #FBFADA;
   box-sizing: border-box;
-  cursor: pointer; /* Add a pointer cursor to indicate clickability */
+  cursor: pointer;
 }
 
 .track-photo {
