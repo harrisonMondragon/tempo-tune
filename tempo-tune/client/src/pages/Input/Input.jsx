@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPlaylistById } from "../../services/api";
 import { catchErrors } from '../../services/util';
-import TrackCard from "../../components/TrackCard/TrackCard";
+import TrackInfo from "../../components/TrackInfo/TrackInfo";
 
 const Input = () => {
 
@@ -26,11 +26,12 @@ const Input = () => {
   return (
     <div className="input-page-container">
 
-      <div classname="input-state-container">
+      <div className="input-state-container">
         {/* Display input playlist data when we get it */}
         {inputPlaylist && (
           <div className="input-playlist-container">
-            <h1>Playlist name: {inputPlaylist.name}</h1>
+            <h1>Playlist: {inputPlaylist.name}</h1>
+            <img src={inputPlaylist.images[0].url} alt="Playlist Cover" className="input-playlist-photo"/>
           </div>
         )}
       </div>
@@ -42,7 +43,7 @@ const Input = () => {
           <ul>
             {tracks.map((track, index) => (
               <li key={index}>
-                <TrackCard track={track.track} />
+                <TrackInfo track={track.track} />
               </li>
             ))}
           </ul>
