@@ -30,7 +30,7 @@ const Input = () => {
         {/* Display input playlist data when we get it */}
         {inputPlaylist && (
           <div className="input-playlist-container">
-            <h1>Playlist: {inputPlaylist.name}</h1>
+            <h1>{inputPlaylist.name}</h1>
             <img src={inputPlaylist.images[0].url} alt="Playlist Cover" className="input-playlist-photo"/>
           </div>
         )}
