@@ -10,6 +10,7 @@
 .input-state-container {
   display: flex;
   flex-grow: 1;
+  width: 50%;
   flex-direction: column;
   align-self: center;
   align-items: center;

@@ -34,9 +34,9 @@ const Home = () => {
     // Fetch the next playlists then update state variables
     const fetchMoreData = async () => {
       // Update state variables with next playlist data
-      const moreUserPlaylitsts = await axios.get(nextPlaylistsUrl);
-      setPlaylists(playlists => ([...playlists, ...moreUserPlaylitsts.data.items]));
-      setNextPlaylistsUrl(moreUserPlaylitsts.data.next)
+      const moreUserPlaylists = await axios.get(nextPlaylistsUrl);
+      setPlaylists(playlists => ([...playlists, ...moreUserPlaylists.data.items]));
+      setNextPlaylistsUrl(moreUserPlaylists.data.next)
     };
 
     // Stop when nextPlaylistsUrl is null
