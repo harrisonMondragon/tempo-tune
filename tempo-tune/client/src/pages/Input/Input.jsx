@@ -11,8 +11,7 @@ const Input = ({ tracks, setTracks }) => {
 
   const navigate = useNavigate()
   const { id } = useParams();
-  const [inputPlaylist, setInputPlaylist] = useState(null);;
-  // const [tracks, setTracks] = useState(null);
+  const [inputPlaylist, setInputPlaylist] = useState(null);
   const [nextTracksUrl, setNextTracksUrl] = useState(null);
   const [bpm, setBpm] = useState(80);
 
