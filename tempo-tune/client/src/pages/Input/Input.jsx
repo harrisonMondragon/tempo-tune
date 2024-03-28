@@ -1,6 +1,6 @@
 import "./Input.css";
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getPlaylistById } from "../../services/api";
 import { catchErrors } from '../../services/util';
@@ -9,6 +9,7 @@ import BpmSelector from "../../components/BpmSelector/BpmSelector";
 
 const Input = () => {
 
+  const navigate = useNavigate()
   const { id } = useParams();
   const [inputPlaylist, setInputPlaylist] = useState(null);;
   const [tracks, setTracks] = useState(null);
@@ -52,6 +53,7 @@ const Input = () => {
 
   const handleFindTracksClick = () => {
     console.log(`Clicked find tracks for playlist: ${id} and BPM: ${bpm}`)
+    navigate(`/results/${id}/${bpm}`);
   };
 
   return (
