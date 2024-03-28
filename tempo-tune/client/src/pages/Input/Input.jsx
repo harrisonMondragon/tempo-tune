@@ -7,12 +7,12 @@ import { catchErrors } from '../../services/util';
 import TrackInfo from "../../components/TrackInfo/TrackInfo";
 import BpmSelector from "../../components/BpmSelector/BpmSelector";
 
-const Input = () => {
+const Input = ({ tracks, setTracks }) => {
 
   const navigate = useNavigate()
   const { id } = useParams();
   const [inputPlaylist, setInputPlaylist] = useState(null);;
-  const [tracks, setTracks] = useState(null);
+  // const [tracks, setTracks] = useState(null);
   const [nextTracksUrl, setNextTracksUrl] = useState(null);
   const [bpm, setBpm] = useState(80);
 
@@ -31,7 +31,7 @@ const Input = () => {
     };
 
     catchErrors(fetchData());
-  }, [id]);
+  }, [id, setTracks]);
 
   // Occurs when nextPlaylistUrl changes
   useEffect(() => {
@@ -49,7 +49,7 @@ const Input = () => {
     }
 
     catchErrors(fetchMoreData());
-  }, [nextTracksUrl]);
+  }, [nextTracksUrl, setTracks]);
 
   const handleFindTracksClick = () => {
     console.log(`Clicked find tracks for playlist: ${id} and BPM: ${bpm}`)
