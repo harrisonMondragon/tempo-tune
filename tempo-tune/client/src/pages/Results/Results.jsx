@@ -1,5 +1,5 @@
 import "./Results.css";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getTrackAudioFeatures } from "../../services/api";
 import { useParams } from 'react-router-dom';
 import { catchErrors } from '../../services/util';
@@ -10,6 +10,7 @@ const Results = ({ opTracks }) => {;
   const [goodTracks, setGoodTracks] = useState([]);
   const [badTracks, setBadTracks] = useState([]);
   const [audioFeatures, setAudioFeatures] = useState([]);
+  const effectExecuted = useRef(false);
 
   const fetchAudioFeatures = async (trackId) => {
     const trackAudioFeatures = await getTrackAudioFeatures(trackId);
@@ -18,8 +19,12 @@ const Results = ({ opTracks }) => {;
 
   // Occurs on mount
   useEffect(() => {
+
+    if (effectExecuted.current) return;
+    effectExecuted.current = true;
+
     for (const track of opTracks) {
-      console.log(track.track.id);
+      // console.log(track.track.id);
       fetchAudioFeatures(track.track.id)
     }
   }, []);
