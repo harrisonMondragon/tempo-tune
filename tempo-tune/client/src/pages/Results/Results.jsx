@@ -7,14 +7,15 @@ import { catchErrors } from '../../services/util';
 const Results = ({ opTracks }) => {;
 
   const { id, bpm } = useParams();
-  const [goodTracks, setGoodTracks] = useState([]);
-  const [badTracks, setBadTracks] = useState([]);
-  const [audioFeatures, setAudioFeatures] = useState([]);
+  const [resultTracks, setresultTracks] = useState([]);
   const effectExecuted = useRef(false);
 
-  const fetchAudioFeatures = async (trackId) => {
-    const trackAudioFeatures = await getTrackAudioFeatures(trackId);
-    setAudioFeatures((audioFeatures) => [...audioFeatures, trackAudioFeatures]);
+  const fetchAudioFeatures = async (track) => {
+    const trackAudioFeatures = await getTrackAudioFeatures(track.track.id);
+
+    const category = trackAudioFeatures.data.tempo > bpm ? 'good' : 'bad';
+    const categorizedTrack = { ...track, audioFeatures: trackAudioFeatures, category };
+    setresultTracks((prevTracks) => [...prevTracks, categorizedTrack]);
   };
 
   // Occurs on mount
@@ -24,15 +25,14 @@ const Results = ({ opTracks }) => {;
     effectExecuted.current = true;
 
     for (const track of opTracks) {
-      // console.log(track.track.id);
-      fetchAudioFeatures(track.track.id)
+      fetchAudioFeatures(track)
     }
   }, []);
 
 
   const showLogs = () => {
-    for (const audioFeature of audioFeatures){
-      console.log(audioFeature.data.tempo);
+    for (const categorizedTrack of resultTracks){
+      console.log(categorizedTrack);
     }
   }
 

@@ -21,3 +21,9 @@ Next Steps:
  - Ability to modify playlist before adding to library
    - Remove tracks that matched the search
    - Add tracks from the chosen input that didn't match the search
+
+Issues I've Noticed:
+ - Refreshing causes issues all arouond the app, should prevent against this
+ - Logout does not actually logout, which is caused by the refresh token
+    - This is why I can only test on other users in incognito
+    - Requires rearranging how App.js passes things around
