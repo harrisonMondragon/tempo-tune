@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { getTrackAudioFeatures } from "../../services/api";
 import { useParams } from 'react-router-dom';
 import { catchErrors } from '../../services/util';
+import ResultTrackInfo from "../../components/ResultTrackInfo/ResultTrackInfo";
 
 const Results = ({ opTracks }) => {;
 
@@ -25,7 +26,7 @@ const Results = ({ opTracks }) => {;
     effectExecuted.current = true;
 
     for (const track of opTracks) {
-      fetchAudioFeatures(track)
+      catchErrors(fetchAudioFeatures(track))
     }
   }, []);
 
@@ -38,18 +39,20 @@ const Results = ({ opTracks }) => {;
 
   return (
     <div className="results-page-container">
-      <h1>HELLOOO</h1>
-      {opTracks && (
-        <div className="ahh">
-          <ul>
-            {opTracks.map((track, index) => (
-              <li key={index}>
-                <p>{track.track.name}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="playlist-tracks-container">
+        {resultTracks && (
+          <div className="tracks-container">
+            <ul>
+              {resultTracks.map((track, index) => (
+                <li key={index}>
+                  <ResultTrackInfo resultTrack={track} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
 
       <button onClick={showLogs}>Ahh show me logs</button>
     </div>
