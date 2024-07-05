@@ -14,7 +14,7 @@
   object-fit: cover;
 }
 
-.track-container:hover {
+.track-info-container:hover {
   background-color: #ADBC9F;
   color: #12372A
 }
