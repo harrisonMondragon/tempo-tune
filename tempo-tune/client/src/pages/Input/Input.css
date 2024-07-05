@@ -10,10 +10,7 @@
 .input-state-container {
   display: flex;
   flex-grow: 1;
-  width: 50%;
   flex-direction: column;
-  align-self: center;
-  align-items: center;
   text-align: center;
 }
 
@@ -23,7 +20,7 @@
   padding-bottom: 50px;
 }
 
-.find-tracks-button {
+.filter-tracks-button {
   background-color: #12372A;
   color: #FBFADA;
   border: 2px solid #12372A;
@@ -34,20 +31,20 @@
   cursor: pointer;
 }
 
-.find-tracks-button:hover {
+.filter-tracks-button:hover {
   background-color: #ADBC9F;
   color: #12372A
 }
 
 .playlist-tracks-container {
   display: flex;
+  width: 70%;
   flex-grow: 1;
   flex-direction: column;
-  align-self: center;
 }
 
 .tracks-container {
-  width: 90%;
+  width: 95%;
   background-color: #12372A;
   border-radius: 6px;
   align-items: flex-start;

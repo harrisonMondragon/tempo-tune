@@ -50,8 +50,8 @@ const Input = ({ tracks, setTracks }) => {
     catchErrors(fetchMoreData());
   }, [nextTracksUrl, setTracks]);
 
-  const handleFindTracksClick = () => {
-    console.log(`Clicked find tracks for playlist: ${id} and BPM: ${bpm}`)
+  const handleFilterTracksClick = () => {
+    console.log(`Clicked filter tracks for playlist: ${id} and BPM: ${bpm}`)
     navigate(`/results/${id}/${bpm}`);
   };
 
@@ -61,29 +61,29 @@ const Input = ({ tracks, setTracks }) => {
       <div className="input-state-container">
         {/* Display input playlist data when we get it */}
         {inputPlaylist && (
-          <div className="input-playlist-container">
+          <div>
             <h1>{inputPlaylist.name}</h1>
             <img src={inputPlaylist.images[0].url} alt="Playlist Cover" className="input-playlist-photo"/>
-            <h2>Gimme a BPM you want:</h2>
+            <h2>Filter by BPM:</h2>
             <BpmSelector bpm={bpm} onChange={handleBpmChange} />
-            <button className="find-tracks-button" onClick = {handleFindTracksClick}>Find Tracks!</button>
+            <button className="filter-tracks-button" onClick = {handleFilterTracksClick}>Filter Tracks!</button>
           </div>
         )}
       </div>
 
       <div className="playlist-tracks-container">
-      {/* Display track data when we get it */}
-      {tracks && (
-        <div className="tracks-container">
-          <ul>
-            {tracks.map((track, index) => (
-              <li key={index}>
-                <TrackInfo track={track.track} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {/* Display track data when we get it */}
+        {tracks && (
+          <div className="tracks-container">
+            <ul>
+              {tracks.map((track, index) => (
+                <li key={index}>
+                  <TrackInfo track={track.track} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   )
