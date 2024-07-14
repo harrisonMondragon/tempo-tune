@@ -10,6 +10,7 @@ function App() {
 
   useEffect(() => {
     setToken(accessToken);
+    localStorage.clear();
   }, []);
 
   return (
@@ -17,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={token ? <Home /> : <Login/>} />
         <Route path="/input/:id" element={<Input tracks={tracks} setTracks={setTracks}/>} />
-        <Route path="/results/:id/:bpm" element={<Results opTracks={tracks}/>} />
+        <Route path="/results/:id" element={<Results opTracks={tracks}/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -5,7 +5,6 @@ import axios from 'axios';
 import { getPlaylistById } from "../../services/api";
 import { catchErrors } from '../../services/util';
 import TrackInfo from "../../components/TrackInfo/TrackInfo";
-import BpmSelector from "../../components/BpmSelector/BpmSelector";
 
 const Input = ({ tracks, setTracks }) => {
 
@@ -13,14 +12,10 @@ const Input = ({ tracks, setTracks }) => {
   const { id } = useParams();
   const [inputPlaylist, setInputPlaylist] = useState(null);
   const [nextTracksUrl, setNextTracksUrl] = useState(null);
-  const [bpm, setBpm] = useState(80);
-
-  const handleBpmChange = (newBpm) => {
-    setBpm(newBpm);
-  };
 
   // Occurs when id changes
   useEffect(() => {
+    localStorage.clear();
     // Get data of playlist with the url id
     const fetchData = async () => {
       const { data } = await getPlaylistById(id);
@@ -50,9 +45,19 @@ const Input = ({ tracks, setTracks }) => {
     catchErrors(fetchMoreData());
   }, [nextTracksUrl, setTracks]);
 
-  const handleFilterTracksClick = () => {
-    console.log(`Clicked filter tracks for playlist: ${id} and BPM: ${bpm}`)
-    navigate(`/results/${id}/${bpm}`);
+  const handleGetAllBPMsClick = () => {
+    // Collect only the relevant parts of inputPlaylist to save
+    const localStoragePlaylist = {
+      name: inputPlaylist.name,
+      id: inputPlaylist.id,
+      images: inputPlaylist.images
+    };
+
+    // Save tracks and playlist to local storage
+    localStorage.setItem('tracks', JSON.stringify(tracks));
+    localStorage.setItem('playlist', JSON.stringify(localStoragePlaylist));
+
+    navigate(`/results/${id}/`);
   };
 
   return (
@@ -64,9 +69,9 @@ const Input = ({ tracks, setTracks }) => {
           <div>
             <h1>{inputPlaylist.name}</h1>
             <img src={inputPlaylist.images[0].url} alt="Playlist Cover" className="input-playlist-photo"/>
-            <h2>Filter by BPM:</h2>
-            <BpmSelector bpm={bpm} onChange={handleBpmChange} />
-            <button className="filter-tracks-button" onClick = {handleFilterTracksClick}>Filter Tracks!</button>
+            <h2>Click on a song:</h2>
+            <h2>or</h2>
+            <button className="filter-tracks-button" onClick = {handleGetAllBPMsClick}>Get All BPMs!</button>
           </div>
         )}
       </div>
