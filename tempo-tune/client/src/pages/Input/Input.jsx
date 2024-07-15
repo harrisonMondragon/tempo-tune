@@ -6,16 +6,18 @@ import { getPlaylistById } from "../../services/api";
 import { catchErrors } from '../../services/util';
 import TrackInfo from "../../components/TrackInfo/TrackInfo";
 
-const Input = ({ tracks, setTracks }) => {
+const Input = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  const [tracks, setTracks] = useState(null)
   const [inputPlaylist, setInputPlaylist] = useState(null);
   const [nextTracksUrl, setNextTracksUrl] = useState(null);
 
   // Occurs when id changes
   useEffect(() => {
     localStorage.clear();
+
     // Get data of playlist with the url id
     const fetchData = async () => {
       const { data } = await getPlaylistById(id);
@@ -57,7 +59,7 @@ const Input = ({ tracks, setTracks }) => {
     localStorage.setItem('tracks', JSON.stringify(tracks));
     localStorage.setItem('playlist', JSON.stringify(localStoragePlaylist));
 
-    navigate(`/results/${id}/`);
+    navigate(`/results/${id}`);
   };
 
   return (

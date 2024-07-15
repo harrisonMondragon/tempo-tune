@@ -6,19 +6,18 @@ import { Login, Home, Input, Results } from './pages';
 
 function App() {
   const [token, setToken] = useState(null);
-  const [tracks, setTracks] = useState(null)
 
   useEffect(() => {
     setToken(accessToken);
-    localStorage.clear();
+    // localStorage.clear();
   }, []);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={token ? <Home /> : <Login/>} />
-        <Route path="/input/:id" element={<Input tracks={tracks} setTracks={setTracks}/>} />
-        <Route path="/results/:id" element={<Results opTracks={tracks}/>} />
+        <Route path="/input/:id" element={<Input/>} />
+        <Route path="/results/:id" element={<Results/>} />
       </Routes>
     </BrowserRouter>
   );

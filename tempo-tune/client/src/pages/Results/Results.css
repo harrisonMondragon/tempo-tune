@@ -6,3 +6,47 @@
   width: 100vw;
   background-color: #FBFADA;
 }
+.result-state-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  text-align: center;
+}
+
+.input-playlist-photo {
+  width: 150px;
+  height: 150px;
+  padding-bottom: 50px;
+}
+
+.filter-tracks-button {
+  background-color: #12372A;
+  color: #FBFADA;
+  border: 2px solid #12372A;
+  border-radius: 3px;
+  padding: 10px 20px;
+  margin: 25px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.filter-tracks-button:hover {
+  background-color: #ADBC9F;
+  color: #12372A
+}
+
+.playlist-tracks-container {
+  display: flex;
+  width: 70%;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.tracks-container {
+  width: 95%;
+  background-color: #12372A;
+  border-radius: 6px;
+  align-items: flex-start;
+  overflow-y: auto;
+  height: 85vh;
+}
