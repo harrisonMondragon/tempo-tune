@@ -16,8 +16,6 @@ const Input = () => {
 
   // Occurs when id changes
   useEffect(() => {
-    localStorage.clear();
-
     // Get data of playlist with the url id
     const fetchData = async () => {
       const { data } = await getPlaylistById(id);
@@ -27,7 +25,7 @@ const Input = () => {
     };
 
     catchErrors(fetchData());
-  }, [id, setTracks]);
+  }, [id]);
 
   // Occurs when nextPlaylistUrl changes
   useEffect(() => {
@@ -45,7 +43,7 @@ const Input = () => {
     }
 
     catchErrors(fetchMoreData());
-  }, [nextTracksUrl, setTracks]);
+  }, [nextTracksUrl]);
 
   const handleGetAllBPMsClick = () => {
     // Collect only the relevant parts of inputPlaylist to save
