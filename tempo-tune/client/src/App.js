@@ -9,7 +9,6 @@ function App() {
 
   useEffect(() => {
     setToken(accessToken);
-    // localStorage.clear();
   }, []);
 
   return (
